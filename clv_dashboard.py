@@ -55,6 +55,18 @@ LAYOUT_BASE = dict(
     yaxis=dict(gridcolor=GRID, zerolinecolor=GRID),
 )
 
+
+def apply_horizontal_bar_layout(fig, title):
+    """Prevent clipping of long category labels and outside value text."""
+    layout_kwargs = dict(LAYOUT_BASE)
+    layout_kwargs["title"] = title
+    layout_kwargs["margin"] = dict(l=130, r=130, t=75, b=55)
+    layout_kwargs["yaxis"] = dict(automargin=True, gridcolor=GRID, zerolinecolor=GRID)
+    layout_kwargs["xaxis"] = dict(automargin=True, gridcolor=GRID, zerolinecolor=GRID)
+    fig.update_layout(**layout_kwargs)
+    fig.update_traces(cliponaxis=False)
+    return fig
+
 # ── Data Loading & Preprocessing ─────────────────────────────────────────────
 def load_data():
     if not os.path.exists(DATA_PATH):
@@ -975,7 +987,7 @@ def cb_channel(clv_seg, churn_seg):
         marker_color=BLUE,
         text=ch_agg.values.round(0), texttemplate="₹%{text:,.0f}", textposition="outside",
     ))
-    bar.update_layout(title="Avg CLV by Channel", **LAYOUT_BASE)
+    bar = apply_horizontal_bar_layout(bar, "Avg CLV by Channel")
 
     # Stacked bar: revenue band per channel
     stk = d.groupby(["acquisition_channel", "revenue_band"]).size().unstack(fill_value=0)
@@ -1096,7 +1108,7 @@ def cb_product(income):
         text=cat_agg["avg_clv"].round(0),
         texttemplate="₹%{text:,.0f}", textposition="outside",
     ))
-    clv_bar.update_layout(title="Avg CLV by Product Category", **LAYOUT_BASE)
+    clv_bar = apply_horizontal_bar_layout(clv_bar, "Avg CLV by Product Category")
 
     cat_rev = cat_agg.sort_values("avg_rev", ascending=True)
     rev_bar = go.Figure(go.Bar(
@@ -1105,7 +1117,7 @@ def cb_product(income):
         text=cat_rev["avg_rev"].round(0),
         texttemplate="₹%{text:,.0f}", textposition="outside",
     ))
-    rev_bar.update_layout(title="Avg Revenue by Product Category", **LAYOUT_BASE)
+    rev_bar = apply_horizontal_bar_layout(rev_bar, "Avg Revenue by Product Category")
 
     scatter = px.scatter(
         cat_agg, x="avg_disc", y="avg_repeat",

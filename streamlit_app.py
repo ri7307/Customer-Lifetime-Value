@@ -51,7 +51,7 @@ try:
     dash_port = run_dash_server()
     time.sleep(1.0)
     dash_url = f"http://127.0.0.1:{dash_port}"
-    iframe(dash_url, height=900)
+    iframe(dash_url, height=900, scrolling=True)
 except Exception as err:
     st.error("Unable to start the Dash server inside Streamlit.")
     st.exception(err)
