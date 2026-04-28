@@ -3,8 +3,8 @@ CLV Business Intelligence Dashboard
 ====================================
 Multi-page interactive Dash dashboard built from the CLV Analytics notebook.
 
-Run:  python clv_dashboard.py
-Then open:  http://localhost:8050
+Run:  streamlit run streamlit_app.py
+Then open:  http://localhost:8501
 
 Requirements:
     pip install dash dash-bootstrap-components plotly pandas numpy
