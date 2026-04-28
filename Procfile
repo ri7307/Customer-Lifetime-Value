@@ -1,1 +1,1 @@
-web: streamlit run streamlit_app.py
+web: python clv_dashboard.py
