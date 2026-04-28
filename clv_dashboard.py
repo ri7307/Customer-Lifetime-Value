@@ -1304,9 +1304,20 @@ def cb_explorer(clv_seg, churn_seg, band, region):
 
 
 # ── Entry Point ───────────────────────────────────────────────────────────────
+def get_app_port(default_port: int = 8050) -> int:
+    for key in ("PORT", "SERVER_PORT", "STREAMLIT_SERVER_PORT", "DYNO_PORT"):
+        value = os.environ.get(key)
+        if value:
+            try:
+                return int(value)
+            except ValueError:
+                continue
+    return default_port
+
 if __name__ == "__main__":
+    port = get_app_port()
     print("=" * 60)
     print("  CLV Business Intelligence Dashboard")
-    print("  Open: http://localhost:8050")
+    print(f"  Open: http://localhost:{port}")
     print("=" * 60)
-    app.run(debug=False, host="0.0.0.0", port=8050)
+    app.run(debug=False, host="0.0.0.0", port=port)
